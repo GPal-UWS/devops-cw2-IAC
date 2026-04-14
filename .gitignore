@@ -1,0 +1,7 @@
+# do not track .pem files
+
+ansible_files/*.pem
+
+# do not track security group file
+
+ansible_files/provision_key_security_group.yml
