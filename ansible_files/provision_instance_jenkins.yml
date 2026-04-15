@@ -26,7 +26,7 @@
     - name: Add new instance to host group via its public IP address
       add_host:
         hostname: "{{ running_api_app_deployment_instance.instances[0].public_ip_address }}"
-        groupname: ec2_staging
+        groupname: ec2_deployment
         ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
 
     - name: Wait for SSH to come up
