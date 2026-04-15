@@ -133,7 +133,7 @@
       # This waits until the DNS matches the EC2 IP
       shell: "dig +short {{ duckdns_domain }}.duckdns.org"
       register: dns_ip
-      until: dns_ip.stdout | trim == ec2_ip
+      until: dns_ip.stdout == ec2_ip
       retries: 10
       delay: 10
       changed_when: false
