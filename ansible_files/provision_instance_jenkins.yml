@@ -137,9 +137,8 @@
       retries: 10
       delay: 10
       changed_when: false
-
-    - debug:
-      msg: "DNS='{{ dns_ip.stdout | trim }}' EC2='{{ ec2_ip }}'"
+      debug:
+        msg: "DNS='{{ dns_ip.stdout | trim }}' EC2='{{ ec2_ip }}'"
 
     - name: Final Result
       debug:
