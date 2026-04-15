@@ -138,6 +138,9 @@
       delay: 10
       changed_when: false
 
+    - debug:
+      msg: "DNS='{{ dns_ip.stdout | trim }}' EC2='{{ ec2_ip }}'"
+
     - name: Final Result
       debug:
         msg: "Success! {{ duckdns_domain }}.duckdns.org is now pointing to {{ ec2_ip }}"
