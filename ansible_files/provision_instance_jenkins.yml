@@ -117,27 +117,3 @@
         name: "{{ remote_ec2_user }}"
         groups: docker
         append: yes
-
-- name: Stage 3 - Verify DuckDNS resolution from Localhost
-  hosts: localhost
-  connection: local
-  vars:
-    duckdns_domain: uws-devops-a2-deployment-b01665431
-
-  tasks:
-    - name: Get the EC2 IP from the previous stage
-      set_fact:
-        ec2_ip: "{{ running_api_app_deployment_instance.instances[0].public_ip_address }}"
-
-    - name: Check what IP DuckDNS is pointing to
-      # This waits until the DNS matches the EC2 IP
-      shell: "dig +short {{ duckdns_domain }}.duckdns.org"
-      register: dns_ip
-      until: dns_ip.stdout == ec2_ip
-      retries: 10
-      delay: 10
-      changed_when: false
-
-    - name: Final Result
-      debug:
-        msg: "Success! {{ duckdns_domain }}.duckdns.org is now pointing to {{ ec2_ip }}"
