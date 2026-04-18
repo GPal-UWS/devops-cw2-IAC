@@ -37,12 +37,6 @@
   become_method: sudo
 
   tasks:
-    - name: Tear down existing docker-compose app
-      community.docker.docker_compose_v2:
-        project_src: /home/ubuntu
-        state: absent
-      ignore_errors: yes
-
     - name: Prune everything on docker
       community.docker.docker_prune:
         containers: true
@@ -55,12 +49,6 @@
       copy:
         src: ../docker-compose-deployment.yml
         dest: /home/ubuntu/docker-compose-deployment.yml
-        mode: "0644"
-
-    - name: Copy nginx config file
-      copy:
-        src: ../nginx/
-        dest: /home/ubuntu/nginx/
         mode: "0644"
 
     - name: Start docker compose app
