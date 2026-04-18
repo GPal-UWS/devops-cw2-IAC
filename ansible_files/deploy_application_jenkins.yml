@@ -55,5 +55,5 @@
       community.docker.docker_compose_v2:
         project_src: /home/ubuntu
         files:
-          - docker-compose-deployment
+          - docker-compose-deployment.yml
         build: never
