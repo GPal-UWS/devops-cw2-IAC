@@ -37,58 +37,15 @@
         timeout: 320
         state: started
 
-- name: Stage 2 - Install DuckDNS and Docker on the deployment EC2 Instance
+- name: Stage 2 - Install Docker on the new EC2 Instance
   hosts: ec2_deployment
   vars:
     remote_ec2_user: ubuntu
-    # your DuckDNS subdomain (without the .duckdns.org part)
-    duckdns_domain: uws-devops-a2-deployment-b01665431
   remote_user: "{{ remote_ec2_user }}"
   become: yes
   become_method: sudo
 
   tasks:
-    # --------- Setup DuckDNS on the deployment instance ---------
-    # Setup duckdns client to update the public IP address of the deployment instance with the duckdns service
-    - name: Ensure curl is installed
-      become: yes
-      package:
-        name: curl
-        state: present
-
-    - name: Create duckdns directory
-      file:
-        path: "~/duckdns"
-        state: directory
-        mode: "0755"
-
-    - name: Create the duck.sh script
-      copy:
-        dest: "~/duckdns/duck.sh"
-        mode: "0700"
-        content: |
-          #!/bin/bash
-          echo url="https://www.duckdns.org/update?domains={{ duckdns_domain }}&token={{ duckdns_api_token }}&ip=" | curl -k -o ~/duckdns/duck.log -K -
-
-    - name: Create the cron job to run every 5 minutes
-      cron:
-        name: "DuckDNS Update"
-        minute: "*/5"
-        job: "~/duckdns/duck.sh >/dev/null 2>&1"
-
-    - name: Run the script for the first time
-      command: "~/duckdns/duck.sh"
-      changed_when: true
-
-    - name: Read the duck.log file
-      slurp:
-        src: "~/duckdns/duck.log"
-      register: duck_log_content
-
-    - name: Display the DuckDNS log result
-      debug:
-        msg: "DuckDNS response: {{ duck_log_content['content'] | b64decode }}"
-
     # --------- Install Docker on the deployment instance ---------
     - name: Add the Docker GPG key
       apt_key:
