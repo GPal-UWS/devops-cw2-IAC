@@ -30,7 +30,7 @@
 - name: Deploy Application on deployment Instance
   vars:
     remote_ec2_user: ubuntu
-    group: ec2_staging
+    group: ec2_deployment
   hosts: "{{ group }}"
   remote_user: "{{ remote_ec2_user }}"
   become: yes
@@ -39,7 +39,7 @@
   tasks:
     - name: Copy docker-compose file
       copy:
-        dest: /home/ubuntu/docker-compose-deployment.yml
+        dest: /home/ubuntu/devops-cw2-application/docker-compose-deployment.yml
         mode: "0655"
         content: |
           version: "latest"
