@@ -39,7 +39,7 @@
   tasks:
     - name: Copy docker-compose file
       copy:
-        dest: /home/ubuntu/devops-cw2-application/docker-compose-deployment.yml
+        dest: /home/ubuntu/docker-compose-deployment.yml
         mode: "0655"
         content: |
           version: "latest"
