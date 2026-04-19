@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+        environment {
+            REPO_URL = 'https://github.com/GPal-UWS/devops-cw2-iac'
+            REPO_BRANCH = 'main'
+            Duck_DNS_Domain = 'uws-devops-a2-b01665431'
+        }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: "${REPO_BRANCH}", url: "${REPO_URL}"
+            }
+        }
+        
+        stage('Provision deployment') {
+            steps {
+                withCredentials([string(credentialsId: 'Duck_DNS_Token', variable: 'Duck_DNS_Token')]) {
+                    ansiblePlaybook(
+                        credentialsId: 'Running_API_App_Key',
+                        playbook: 'ansible_files/provision_instance_jenkins.yml',
+                        extraVars: [
+                            duckdns_domain: "${Duck_DNS_Domain}",
+                            duckdns_api_token: "${Duck_DNS_Token}"
+                        ]
+                    )
+                } 
+            }
+        }
+        
+        stage('Deployment') {
+            steps {
+                ansiblePlaybook(
+                    credentialsId: 'Running_API_App_Key',
+                    playbook: 'ansible_files/deploy_application_jenkins.yml'
+                )
+            }
+        }
+    }
+}
