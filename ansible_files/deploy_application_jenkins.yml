@@ -48,7 +48,7 @@
     - name: copy nginx file from the parent directory
       copy:
         src: ../nginx/nginx.conf
-        dest: /home/ubuntu/nginx/nginx.conf
+        dest: /home/ubuntu/nginx.conf
 
     - name: Copy docker-compose file from the parent directory
       copy:
